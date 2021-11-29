@@ -18,9 +18,14 @@ class A:
         print(text)
 
     def activate(self):
+        # Почему в даном случае декоратору не нужно передовать self?
+        #    @decorator2 
+        #    def say_text(self, text):  ==   decorator1(self.say_text)
+        #
         self.say_text = decorator1(self.say_text)
 
 A1 = A()
 A1.say_text('123abs')
 A1.activate()
 A1.say_text('123abs')
+
