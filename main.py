@@ -1,10 +1,11 @@
+# нет self
 def decorator1(f):
     def wrapper(text):
         return f(text+'$$$$')
 
     return wrapper
 
-
+# есть self
 def decorator2(f):
     def wrapper(self, text):
         return f(self, text+'LLLL')
@@ -13,19 +14,22 @@ def decorator2(f):
 
 
 class A:
+    # работает только с self
     @decorator2
     def say_text(self, text):
         print(text)
 
+    # работает без self
     def activate(self):
-        # Почему в даном случае декоратору не нужно передовать self?
-        #    @decorator2 
-        #    def say_text(self, text):  ==   decorator1(self.say_text)
-        #
         self.say_text = decorator1(self.say_text)
 
 A1 = A()
 A1.say_text('123abs')
-A1.activate()
+
+# работает только без self
+A1.say_text = decorator1(A1.say_text)
 A1.say_text('123abs')
 
+# Почему в даном случае декоратору не нужно передовать self?
+#    @decorator2
+#    def say_text(self, text)   ==    A1.say_text = decorator1(A1.say_text)
